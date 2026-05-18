@@ -161,7 +161,18 @@ function ProductForm({ initial, onClose }: { initial: any; onClose: () => void }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    const payload = { ...form, price: Number(form.price), stock: Number(form.stock) };
+    const slug = (form.slug || form.name)
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || `product-${Date.now()}`;
+    const payload = {
+      ...form,
+      slug,
+      price: Number(form.price) || 0,
+      stock: Number(form.stock) || 0,
+      image_url: form.image_url || null,
+    };
     const { error } = initial.id
       ? await supabase.from("products").update(payload).eq("id", initial.id)
       : await supabase.from("products").insert(payload);
