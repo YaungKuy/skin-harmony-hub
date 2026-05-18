@@ -196,9 +196,9 @@ function ProductForm({ initial, onClose }: { initial: any; onClose: () => void }
         <h3 className="font-display text-2xl">{initial.id ? "Edit product" : "New product"}</h3>
         <div className="mt-5 space-y-3 text-sm">
           {[
-            ["name", "Name"], ["slug", "Slug (auto if blank)"], ["category", "Category"], ["price", "Price"], ["stock", "Stock"], ["image_url", "Image URL"],
-          ].map(([k, label]) => (
-            <input key={k} required={k === "name" || k === "price"} value={(form as any)[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} placeholder={label} className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:border-ring" />
+            ["name", "Name", "text"], ["slug", "Slug (auto if blank)", "text"], ["category", "Category", "text"], ["price", "Price", "number"], ["stock", "Stock", "number"], ["image_url", "Image URL", "text"],
+          ].map(([k, label, type]) => (
+            <input key={k} type={type} step={k === "price" ? "0.01" : "1"} min={type === "number" ? "0" : undefined} required={k === "name" || k === "price"} value={(form as any)[k] ?? ""} onChange={(e) => setForm({ ...form, [k]: e.target.value })} placeholder={label} className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:border-ring" />
           ))}
           <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} placeholder="Description" className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:border-ring" />
           <label className="flex items-center gap-2"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Featured on homepage</label>
