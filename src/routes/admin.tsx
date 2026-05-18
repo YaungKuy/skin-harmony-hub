@@ -18,13 +18,21 @@ function Admin() {
   const [tab, setTab] = useState<Tab>("overview");
 
   useEffect(() => {
-    if (!loading && (!user || role !== "admin")) {
+    if (loading) return;
+    if (!user) {
+      navigate({ to: "/login" });
+      return;
+    }
+    if (role && role !== "admin") {
       toast.error("Admin access required");
       navigate({ to: "/" });
     }
   }, [user, role, loading, navigate]);
 
-  if (loading || role !== "admin") return null;
+  if (loading || !user || role === null) {
+    return <p className="py-20 text-center text-muted-foreground">Loading…</p>;
+  }
+  if (role !== "admin") return null;
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-12">
