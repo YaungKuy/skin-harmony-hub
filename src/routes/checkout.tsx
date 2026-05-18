@@ -66,8 +66,8 @@ function Checkout() {
       if (itemsErr) throw itemsErr;
 
       clear();
-      toast.success("Order placed!");
-      navigate({ to: "/account" });
+      toast.success("Order placed! Scan KHQR to pay.");
+      navigate({ to: "/pay/$orderId", params: { orderId: order.id } });
     } catch (err: any) {
       toast.error(err.message ?? "Failed to place order");
     } finally {
@@ -98,10 +98,10 @@ function Checkout() {
           className="w-full rounded-md border border-input bg-background px-4 py-3 text-sm outline-none focus:border-ring"
         />
         <button disabled={submitting} className="w-full rounded-full bg-primary py-3 text-sm text-primary-foreground hover:opacity-90 disabled:opacity-60">
-          {submitting ? "Placing order…" : `Place order · $${total.toFixed(2)}`}
+          {submitting ? "Placing order…" : `Continue to KHQR payment · $${total.toFixed(2)}`}
         </button>
         <p className="text-center text-xs text-muted-foreground">
-          Payment isn't collected in this demo — orders are saved for the team to fulfill manually.
+          You'll see a KHQR code to scan with any Bakong-enabled bank app (ABA, ACLEDA, Wing…).
         </p>
       </form>
       <aside className="h-fit rounded-md border border-border bg-card p-6">
