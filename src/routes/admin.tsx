@@ -161,7 +161,18 @@ function ProductForm({ initial, onClose }: { initial: any; onClose: () => void }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    const payload = { ...form, price: Number(form.price), stock: Number(form.stock) };
+    const slug = (form.slug || form.name)
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "") || `product-${Date.now()}`;
+    const payload = {
+      ...form,
+      slug,
+      price: Number(form.price) || 0,
+      stock: Number(form.stock) || 0,
+      image_url: form.image_url || null,
+    };
     const { error } = initial.id
       ? await supabase.from("products").update(payload).eq("id", initial.id)
       : await supabase.from("products").insert(payload);
@@ -177,9 +188,9 @@ function ProductForm({ initial, onClose }: { initial: any; onClose: () => void }
         <h3 className="font-display text-2xl">{initial.id ? "Edit product" : "New product"}</h3>
         <div className="mt-5 space-y-3 text-sm">
           {[
-            ["name", "Name"], ["slug", "Slug (url-friendly)"], ["category", "Category"], ["price", "Price"], ["stock", "Stock"], ["image_url", "Image URL"],
+            ["name", "Name"], ["slug", "Slug (auto if blank)"], ["category", "Category"], ["price", "Price"], ["stock", "Stock"], ["image_url", "Image URL"],
           ].map(([k, label]) => (
-            <input key={k} required={k !== "image_url"} value={(form as any)[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} placeholder={label} className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:border-ring" />
+            <input key={k} required={k === "name" || k === "price"} value={(form as any)[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} placeholder={label} className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:border-ring" />
           ))}
           <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} placeholder="Description" className="w-full rounded-md border border-input bg-background px-3 py-2 outline-none focus:border-ring" />
           <label className="flex items-center gap-2"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Featured on homepage</label>
