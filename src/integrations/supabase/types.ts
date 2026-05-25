@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      coupons: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          discount_type: string
+          discount_value: number
+          expires_at: string | null
+          id: string
+          max_uses: number | null
+          uses: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          discount_type: string
+          discount_value: number
+          expires_at?: string | null
+          id?: string
+          max_uses?: number | null
+          uses?: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          max_uses?: number | null
+          uses?: number
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           id: string
@@ -167,6 +203,41 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          product_id: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          product_id: string
+          rating: number
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          product_id?: string
+          rating?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -187,6 +258,35 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      wishlists: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
