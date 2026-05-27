@@ -11,8 +11,11 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user, role, loading } = useAuth();
   const { redirect } = Route.useSearch();
+
+  const destinationFor = (r: string | null) =>
+    r === "admin" ? "/admin" : redirect;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,8 +23,8 @@ function Login() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: redirect });
-  }, [user, loading, redirect, navigate]);
+    if (!loading && user && role) navigate({ to: destinationFor(role) });
+  }, [user, role, loading, redirect, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
