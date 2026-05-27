@@ -14,34 +14,42 @@ export function SiteHeader() {
           Maren <span className="text-clay">&amp;</span> Sage
         </Link>
         <nav className="hidden items-center gap-8 text-sm md:flex">
-          <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">Home</Link>
-          <Link to="/shop" activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">Shop</Link>
-          <Link to="/about" activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">About</Link>
-          <Link to="/contact" activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">Contact</Link>
-          {role === "admin" && (
-            <Link to="/admin" activeProps={{ className: "text-foreground" }} className="text-clay transition hover:text-foreground">Admin</Link>
+          {role === "admin" ? (
+            <>
+              <Link to="/admin" activeProps={{ className: "text-foreground" }} className="text-clay transition hover:text-foreground">Admin Dashboard</Link>
+              <Link to="/" activeOptions={{ exact: true }} className="text-muted-foreground transition hover:text-foreground">View Site</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">Home</Link>
+              <Link to="/shop" activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">Shop</Link>
+              <Link to="/about" activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">About</Link>
+              <Link to="/contact" activeProps={{ className: "text-foreground" }} className="text-muted-foreground transition hover:text-foreground">Contact</Link>
+            </>
           )}
         </nav>
         <div className="flex items-center gap-2">
           <Link
-            to={user ? "/account" : "/login"}
+            to={user ? (role === "admin" ? "/admin" : "/account") : "/login"}
             className="rounded-full p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
             aria-label="Account"
           >
             <User className="h-5 w-5" />
           </Link>
-          <Link
-            to="/cart"
-            className="relative rounded-full p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
-            aria-label="Cart"
-          >
-            <ShoppingBag className="h-5 w-5" />
-            {count > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
-                {count}
-              </span>
-            )}
-          </Link>
+          {role !== "admin" && (
+            <Link
+              to="/cart"
+              className="relative rounded-full p-2 text-muted-foreground transition hover:bg-muted hover:text-foreground"
+              aria-label="Cart"
+            >
+              <ShoppingBag className="h-5 w-5" />
+              {count > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
+                  {count}
+                </span>
+              )}
+            </Link>
+          )}
         </div>
       </div>
     </header>
