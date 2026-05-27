@@ -9,14 +9,13 @@ export const Route = createFileRoute("/account")({
 });
 
 function Account() {
-  const { user, role, loading, signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (loading) return;
     if (!user) navigate({ to: "/login", search: { redirect: "/account" } });
-    else if (role === "admin") navigate({ to: "/admin" });
-  }, [loading, user, role, navigate]);
+  }, [loading, user, navigate]);
 
   const { data: orders } = useQuery({
     enabled: !!user,
