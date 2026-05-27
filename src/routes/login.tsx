@@ -11,8 +11,11 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user, role, loading } = useAuth();
   const { redirect } = Route.useSearch();
+
+  const destinationFor = (r: string | null) =>
+    r === "admin" ? "/admin" : redirect;
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
