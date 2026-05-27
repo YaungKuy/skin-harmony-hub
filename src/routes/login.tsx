@@ -23,8 +23,8 @@ function Login() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) navigate({ to: redirect });
-  }, [user, loading, redirect, navigate]);
+    if (!loading && user && role) navigate({ to: destinationFor(role) });
+  }, [user, role, loading, redirect, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
